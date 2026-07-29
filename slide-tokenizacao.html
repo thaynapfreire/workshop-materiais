@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Tokenização — slide de workshop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #EFF3F1;
+    --ink: #16211D;
+    --ink-soft: #4B5750;
+    --card: #FFFFFF;
+    --coral: #E2583F;
+    --coral-ink: #7A2416;
+    --gold: #E7A420;
+    --gold-ink: #6B4B0A;
+    --teal: #0F6E5D;
+    --teal-ink: #06342A;
+    --line: #D8DFDB;
+  }
+  *{ box-sizing: border-box; }
+  html,body{
+    margin:0; padding:0; background: var(--bg);
+    font-family: 'IBM Plex Sans', sans-serif;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+  body{
+    min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    padding: 24px;
+  }
+  .slide{
+    width: 100%;
+    max-width: 1180px;
+    aspect-ratio: 16/9;
+    background: var(--card);
+    border-radius: 20px;
+    border: 1px solid var(--line);
+    box-shadow: 0 1px 2px rgba(22,33,29,0.04), 0 24px 48px -24px rgba(22,33,29,0.18);
+    padding: 52px 60px 40px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--teal-ink);
+    font-weight: 500;
+  }
+  h1{
+    font-family:'Archivo', sans-serif;
+    font-weight: 800;
+    font-size: 40px;
+    line-height: 1.08;
+    margin: 10px 0 8px;
+    letter-spacing: -0.01em;
+  }
+  .sub{
+    font-size: 17px;
+    color: var(--ink-soft);
+    max-width: 640px;
+    line-height: 1.5;
+    margin: 0 0 28px;
+  }
+  .sub b{ color: var(--ink); font-weight: 600; }
+
+  .body{
+    flex: 1;
+    display: grid;
+    grid-template-columns: minmax(320px, 1.1fr) minmax(320px, 1fr);
+    gap: 40px;
+    align-items: center;
+  }
+
+  .analogy{
+    display:flex; flex-direction:column; justify-content:center;
+    border-right: 1px solid var(--line);
+    padding-right: 36px;
+  }
+  .analogy p{
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--ink);
+    margin: 0 0 14px;
+  }
+  .analogy p:last-child{ margin-bottom:0; }
+  .analogy .label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+  }
+
+  .demo{ display:flex; flex-direction:column; justify-content:center; gap:26px; }
+
+  .row{ display:flex; align-items:center; gap:18px; }
+  .row .word{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 15px;
+    color: var(--ink-soft);
+    width: 118px;
+    flex-shrink:0;
+  }
+  .blocks{ display:flex; gap:8px; flex-wrap:wrap; }
+
+  .brick{
+    position: relative;
+    border-radius: 9px;
+    padding: 13px 18px;
+    font-family:'IBM Plex Mono', monospace;
+    font-weight: 500;
+    font-size: 15px;
+    color: #fff;
+    box-shadow: inset 0 -3px 0 rgba(0,0,0,0.16), inset 0 2px 0 rgba(255,255,255,0.25);
+  }
+  .brick::before{
+    content:"";
+    position:absolute;
+    top: -6px; left: 50%;
+    transform: translateX(-50%);
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: inherit;
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,0.16), inset 0 1px 0 rgba(255,255,255,0.3);
+  }
+  .brick.coral{ background: var(--coral); }
+  .brick.gold{ background: var(--gold); color: var(--gold-ink); }
+  .brick.teal{ background: var(--teal); }
+
+  .arrow{
+    color: var(--ink-soft);
+    font-size: 18px;
+    padding: 0 2px;
+  }
+
+  .idbox{
+    display:flex; align-items:center; gap:10px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .idbox .chip{
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 4px 9px;
+    color: var(--ink);
+  }
+
+  .footer{
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    display:flex; align-items:baseline; gap: 10px;
+  }
+  .footer .tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--coral-ink);
+    font-weight: 500;
+    flex-shrink:0;
+  }
+  .footer p{
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+  .footer b{ color: var(--ink); font-weight: 600; }
+
+  @media (max-width: 760px){
+    .slide{ aspect-ratio: auto; padding: 32px; }
+    .body{ grid-template-columns: 1fr; }
+    .analogy{ border-right:none; padding-right:0; border-bottom:1px solid var(--line); padding-bottom:24px; }
+  }
+</style>
+</head>
+<body>
+  <div class="slide">
+    <span class="eyebrow">Tokenização</span>
+    <h1>Como a IA lê um texto</h1>
+    <p class="sub">A IA não lê letra por letra, nem palavra inteira de cada vez. Ela lê em blocos, do mesmo jeito que peças de LEGO montam qualquer coisa.</p>
+
+    <div class="body">
+      <div class="analogy">
+        <div class="label">A analogia</div>
+        <p>Ninguém constrói um prédio grão de areia por grão de areia e também não dá pra comprar ele já pronto, porque aí amanhã você não consegue montar nada diferente.</p>
+        <p>A <b>solução é o bloco</b>: peça do tamanho certo, pronta, que <b>encaixa em qualquer combinação</b>.</p>
+        <p>A IA faz o mesmo com as palavras. Cada bloco é um <b>token</b></p>
+        <p>· Palavra comum vira um bloco único</p>
+        <p>· Palavra rara quebra em pedaços menores que já existem prontos</p>
+      </div>
+
+      <div class="demo">
+        <div class="row">
+          <span class="word">"gato"</span>
+          <div class="blocks">
+            <div class="brick teal">gato</div>
+          </div>
+        </div>
+        <div class="row">
+          <span class="word">"desconfiança"</span>
+          <div class="blocks">
+            <div class="brick coral">des</div>
+            <div class="brick gold">confi</div>
+            <div class="brick coral">ança</div>
+          </div>
+        </div>
+        <div class="idbox">
+          <span>cada bloco vira um número</span>
+          <span class="chip">512</span>
+          <span class="chip">87</span>
+          <span class="chip">3341</span>
+          <span>: o crachá que a IA usa pra puxar o significado</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span class="tag">Por isso</span>
+      <p>a IA às vezes erra ao contar letras de uma palavra. Ela vê o bloco <b>morango</b> inteiro, como uma figurinha, e não enxerga as letrinhas de dentro.</p>
+    </div>
+  </div>
+</body>
+</html>
