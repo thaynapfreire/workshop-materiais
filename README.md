@@ -11,3 +11,5 @@ Bem-vindo(a)! Aqui você encontra todos os materiais do workshop de Inteligênci
 - [Skill 2 - Kickoff de Dados](skill-2-kickoff-de-dados_1.md)
 - [Skill 3 - Product Discovery](skill-3-product-discovery.md)
 - [Design System - Paleta de Cores](design-system-apresentacao-executiva-paleta-cores.md)
+## 🧩 Slides complementares
+- [Tokenização - Como a IA lê um texto](https://thaynapfreire.github.io/workshop-materiais/slide-tokenizacao.html)
